@@ -1,20 +1,30 @@
 
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "To finish, just hit return twice at any stage"
+
+  
   students = []
-  name = gets.chomp
+  name = nil
   while name != "" do
-    students << {name: name, cohort: :november}
-    puts "Now we have #{students.count} students"
+    puts "Please enter the names of the students"
     name = gets.chomp
+
+    puts "Please enter Hobby"
+    hobby = gets.chomp
+
+    puts "Please enter Birth Country"
+    birth_country = gets.chomp
+
+    students << {name: name, cohort: :november, hobby: hobby, birth_country: birth_country}
+    puts "Now we have #{students.count} students"
+
   end
   students
 end
 
 def print_header  
   puts "The students of Villains Academy"
-  puts "-------------"
+  puts "-------------".center(20)
 end 
 
 def print_names(students, first_letter)
