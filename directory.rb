@@ -65,7 +65,14 @@ end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
-students = input_students(cohorts)
-print_header
-print_names(students, cohorts)
-print_footer(students)
+# students = input_students(cohorts)
+# print_header
+# print_names(students, cohorts)
+# print_footer(students)
+
+def print_a_line_break_3_times(string)
+  3.times { puts string.+("\n")} 
+
+end
+
+print_a_line_break_3_times("hey")
