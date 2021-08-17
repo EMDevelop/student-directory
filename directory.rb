@@ -1,24 +1,12 @@
+cohorts = ["january","february" ,"march","april", "may", "june", "july", "august", "september", "october", "november", "december"]
 
-def input_students
+def input_students(cohorts)
+
   puts "To finish, just hit return twice at any stage"
   students = []
+  
   name = nil
-  # months = {
-  #   january = :january,
-  #   february = :february,
-  #   march = :march,
-  #   april = :april,
-  #   may = :may,
-  #   june = :june,
-  #   july = :july,
-  #   august = :august,
-  #   september = :september,
-  #   october = :october,
-  #   november = :november,
-  #   december = :december,
-  # }
-  cohorts = ["january","february" ,"march","april", "may", "june", "july", "august", "september", "october", "november", "december"]
-
+  
   while true do
     
     puts "Please enter the names of the students"
@@ -41,9 +29,10 @@ def input_students
     puts "Please enter Birth Country"
     birth_country = gets.chomp
 
-    students << {name: name, cohort: :november, hobby: hobby, birth_country: birth_country}
+    students << {name: name, cohort: cohort.to_sym, hobby: hobby, birth_country: birth_country}
     students.count == 1 ? "Now we have 1 student" : "Now we have #{students.count} students"
-
+    print students
+    
     puts "Are you done adding students? y = quit, anything else carry on "
     quit = gets.chomp.downcase
     if quit == "y"
@@ -59,31 +48,24 @@ def print_header
   puts "-------------".center(20)
 end 
 
-def print_names(students, first_letter)
-# {:name=>"ed", :cohort=>:november}
-
+def print_names(students,cohorts)
   acc = 0
-  while acc < students.length do
-    if students[acc][:name][0] == first_letter && students[acc][:name].length < 12
-       puts "#{acc + 1}. #{students[acc][:name]} (#{students[acc][:cohort]} cohort)"
-    end
+  while acc < cohorts.length do
+    puts "Students enrolled in our #{cohorts[acc].capitalize!} cohort:"
+    students.map { |student|
+      if student[:cohort] == cohorts[acc].downcase.to_sym
+        puts student[:name]
+      end
+    }
     acc += 1
   end
-  
 
-
-  # students.each_with_index do |student, index|
-  #    if student[:name][0] == first_letter && student[:name].length < 12
-  #     puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
-  #   end
-  # end
 end
 
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
-
-students = input_students
+students = input_students(cohorts)
 print_header
-print_names(students, "e")
+print_names(students, cohorts)
 print_footer(students)
