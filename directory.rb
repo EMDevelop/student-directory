@@ -19,7 +19,7 @@ end
 
 def print_names(students, first_letter)
   students.each_with_index do |student, index|
-     if student[:name][0] == first_letter 
+     if student[:name][0] == first_letter && student[:name].length < 12
       puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
     end
   end
