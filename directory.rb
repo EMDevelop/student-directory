@@ -19,8 +19,8 @@ def input_students
   # }
   cohorts = ["january","february" ,"march","april", "may", "june", "july", "august", "september", "october", "november", "december"]
 
-  while name != "" do
-
+  while true do
+    
     puts "Please enter the names of the students"
     name = gets.chomp
 
@@ -42,7 +42,13 @@ def input_students
     birth_country = gets.chomp
 
     students << {name: name, cohort: :november, hobby: hobby, birth_country: birth_country}
-    puts "Now we have #{students.count} students"
+    students.count == 1 ? "Now we have 1 student" : "Now we have #{students.count} students"
+
+    puts "Are you done adding students? y = quit, anything else carry on "
+    quit = gets.chomp.downcase
+    if quit == "y"
+      break
+    end
 
   end
   students
