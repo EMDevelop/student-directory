@@ -18,11 +18,23 @@ def print_header
 end 
 
 def print_names(students, first_letter)
-  students.each_with_index do |student, index|
-     if student[:name][0] == first_letter && student[:name].length < 12
-      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+# {:name=>"ed", :cohort=>:november}
+
+  acc = 0
+  while acc < students.length do
+    if students[acc][:name][0] == first_letter && students[acc][:name].length < 12
+       puts "#{acc + 1}. #{students[acc][:name]} (#{students[acc][:cohort]} cohort)"
     end
+    acc += 1
   end
+  
+
+
+  # students.each_with_index do |student, index|
+  #    if student[:name][0] == first_letter && student[:name].length < 12
+  #     puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+  #   end
+  # end
 end
 
 def print_footer(names)
