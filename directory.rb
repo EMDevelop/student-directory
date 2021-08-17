@@ -72,7 +72,6 @@ end
 
 def print_a_line_break_3_times(string)
   3.times { puts string.+("\n")} 
-
 end
 
 print_a_line_break_3_times("hey")
