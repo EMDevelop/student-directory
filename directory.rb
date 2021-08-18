@@ -65,6 +65,7 @@ end
 def print_menu
     puts "1. Input the students"
     puts "2. Show the students"
+    puts "3. Save the students"
     puts "9. Exit" 
 end
 
@@ -74,12 +75,25 @@ def show_students
   print_footer
 end
 
+def save_students
+  #Saves to CSV
+  file = File.open("students.csv", "w")
+  @students.each do |student|
+    data = [student[:name],student[:birth_country], student[:hobby],student[:cohort]]
+    line = data.join(",")
+    file.puts line
+  end
+  file.close
+end
+
 def process(selection)
   case selection
     when "1"
       input_students   
     when "2"
       show_students
+    when "3"
+      save_students
     when "9"
       exit 
     else
