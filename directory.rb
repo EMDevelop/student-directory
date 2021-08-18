@@ -1,4 +1,3 @@
-cohorts = ["january","february" ,"march","april", "may", "june", "july", "august", "september", "october", "november", "december"]
 
 def input_students(cohorts)
 
@@ -49,6 +48,9 @@ def print_header
 end 
 
 def print_names(students,cohorts)
+  if students.length == 0
+    return
+  end
   acc = 0
   while acc < cohorts.length do
     puts "Students enrolled in our #{cohorts[acc].capitalize!} cohort:"
@@ -65,13 +67,29 @@ end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
-# students = input_students(cohorts)
-# print_header
-# print_names(students, cohorts)
-# print_footer(students)
 
-def print_a_line_break_3_times(string)
-  3.times { puts string.+("\n")} 
+def interactive_menu
+  students = []
+  cohorts = ["january","february" ,"march","april", "may", "june", "july", "august", "september", "october", "november", "december"]
+  loop do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit" 
+    selection = gets.chomp
+
+    case selection
+    when "1"
+      students = input_students(cohorts)    
+    when "2"
+      print_header
+      print_names(students, cohorts)
+      print_footer(students)
+    when "9"
+      exit 
+    else
+      puts "I don't know what you meant, try again"
+    end
+  end
 end
 
-print_a_line_break_3_times("hey")
+interactive_menu
