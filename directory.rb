@@ -2,38 +2,38 @@
 @students = []
 
 def input_students
-
   puts "To finish, just hit return twice at any stage"
-  name = nil
   while true do
     puts "Please enter the names of the students"
     name = STDIN.gets.chomp
     puts "Enter your cohort month, e.g. January, December"
-    cohort = STDIN.gets.chomp.downcase
-    until @cohorts.include?(cohort) do 
-      if @cohorts.include?(cohort)
-        break
-      else
-        puts "you've entered an incorrect cohort month, try again please:"
-      end
-    cohort = STDIN.gets.chomp.downcase
-    end
-
+    cohort = check_valid_cohort(STDIN.gets.chomp.downcase)
     puts "Please enter Hobby"
     hobby = STDIN.gets.chomp
     puts "Please enter Birth Country"
     birth_country = STDIN.gets.chomp
     update_student_records(name, cohort.to_sym, hobby, birth_country)
     @students.count == 1 ? "Now we have 1 student" : "Now we have #{@students.count} students"
-
-    puts "Are you done adding students? y = quit, anything else carry on "
-    quit = STDIN.gets.chomp.downcase
-    if quit == "y"
-      break
-    end
-
+    break if finished_input
   end
   @students
+end
+
+def finished_input
+  puts "type 'quit' to quit, hit 'enter' to add more"
+  input = STDIN.gets.chomp.downcase
+  input == "quit" ? true : false 
+end
+
+def check_valid_cohort(input)
+  return input if @cohorts.include?(input) 
+
+  while true do
+    puts "you've entered an incorrect cohort month, try again please:"
+    cohort = STDIN.gets.chomp.downcase
+    return cohort if @cohorts.include?(cohort) 
+  end
+
 end
 
 def update_student_records(name, cohort, hobby, country)
@@ -46,9 +46,7 @@ def print_header
 end 
 
 def print_names
-  if @students.length == 0
-    return
-  end
+  return if @students.length == 0
   acc = 0
   while acc < @cohorts.length do
     puts "Students enrolled in our #{@cohorts[acc].capitalize!} cohort:"
@@ -94,13 +92,12 @@ end
 
 def check_valid_file
   filename = ARGV.first
-  # return if filename.nil?       #Removing this will allow for auto load of the file
-  if File.exists?(filename)
+  if File.exists?(filename) # if it exists
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+     puts "Loaded #{@students.count} from #{filename}"
   else
-    puts "File: #{filename} doesn't exist m8"
-    exit
+    puts "Sorry, #{filename} doesn't exist."
+    exit 
   end
 end
 
@@ -131,7 +128,7 @@ def process(selection)
 end
 
 def interactive_menu
-  check_valid_file
+  ARGV.first.nil? ? load_students : check_valid_file
   loop do
     print_menu
     process(STDIN.gets.chomp)
