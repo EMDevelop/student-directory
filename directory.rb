@@ -7,33 +7,37 @@ def input_students
   name = nil
   while true do
     puts "Please enter the names of the students"
-    name = gets.chomp
+    name = STDIN.gets.chomp
     puts "Enter your cohort month, e.g. January, December"
-    cohort = gets.chomp.downcase
+    cohort = STDIN.gets.chomp.downcase
     until @cohorts.include?(cohort) do 
       if @cohorts.include?(cohort)
         break
       else
         puts "you've entered an incorrect cohort month, try again please:"
       end
-    cohort = gets.chomp.downcase
+    cohort = STDIN.gets.chomp.downcase
     end
 
     puts "Please enter Hobby"
-    hobby = gets.chomp
+    hobby = STDIN.gets.chomp
     puts "Please enter Birth Country"
-    birth_country = gets.chomp
-    @students << {name: name, cohort: cohort.to_sym, hobby: hobby, birth_country: birth_country}
+    birth_country = STDIN.gets.chomp
+    update_student_records(name, cohort.to_sym, hobby, birth_country)
     @students.count == 1 ? "Now we have 1 student" : "Now we have #{@students.count} students"
 
     puts "Are you done adding students? y = quit, anything else carry on "
-    quit = gets.chomp.downcase
+    quit = STDIN.gets.chomp.downcase
     if quit == "y"
       break
     end
 
   end
   @students
+end
+
+def update_student_records(name, cohort, hobby, country)
+  @students << {name: name, cohort: cohort, hobby: hobby, birth_country: country}
 end
 
 def print_header  
@@ -87,11 +91,24 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+
+def check_valid_file
+  filename = ARGV.first
+  # return if filename.nil?       #Removing this will allow for auto load of the file
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "File: #{filename} doesn't exist m8"
+    exit
+  end
+end
+
+def load_students(file_name = "students.csv")
+  file = File.open(file_name, "r")
   file.readlines.each { |line|
     name, birth_country,hobby,cohort = line.chomp.split(',')
-    @students << {:name => name, cohort: cohort.to_sym,birth_country: birth_country, hobby: hobby}
+    update_student_records(name, cohort.to_sym, hobby, birth_country)
     }
   file.close
 end
@@ -114,10 +131,13 @@ def process(selection)
 end
 
 def interactive_menu
+  check_valid_file
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
+
+
 
 interactive_menu
