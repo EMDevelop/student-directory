@@ -63,21 +63,6 @@ def print_footer
   puts "Overall, we have #{@students.count} great students"
 end
 
-def menu_options
-  {
-    1=> "Input the students",
-    2=> "Show the students",
-    3=> "Save the students",
-    4=> "Load existing students",
-    9=> "Exit" 
-  }
-end
-
-def print_menu
-  menu_options.each { |number, description|
-    puts "#{number}. #{description}"
-  }
-end
 
 def show_students
   print_header
@@ -117,21 +102,32 @@ def load_students(file_name = "students.csv")
   file.close
 end
 
-def process(selection)
-  puts "you chose #{print_menu[selection.to_i]}"
-  case selection
-    when "1"
-      input_students   
-    when "2"
-      show_students
-    when "3"
-      save_students
-    when "4"
-      load_students
-    when "9"
-      exit 
-    else
-      puts "I don't know what you meant, try again"
+
+
+def menu_options
+  { #ref https://stackoverflow.com/questions/13033830/ruby-function-as-value-of-hash
+    1=> {"option_name" =>  "Input the students", "method" => method(:input_students)},
+    2=> {"option_name" => "Show the students","method" => method(:show_students)},
+    3=> {"option_name" => "Save the students","method" => method(:save_students)},
+    4=> {"option_name" => "Load existing students","method" => method(:load_students)},
+    9=> {"option_name" => "Exit", "method" => "exit"},
+  }
+end
+
+def print_menu
+  menu_options.each { |number, description|
+    puts "#{number}. #{description["option_name"]}"
+  }
+end
+
+def process_selection(selection)
+  puts "you chose #{print_menu[selection.to_i]["option_name"]}"
+  if !menu_options[selection]
+    puts "I don't know what you meant, try again" 
+  elsif menu_options[selection]["method"] == "exit"
+    exit
+  else
+    menu_options[selection]["method"].call
   end
 end
 
@@ -139,7 +135,7 @@ def interactive_menu
   ARGV.first.nil? ? load_students : check_valid_file
   loop do
     print_menu
-    process(STDIN.gets.chomp)
+    process_selection(STDIN.gets.chomp.to_i)
   end
 end
 
