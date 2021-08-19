@@ -16,7 +16,6 @@ def input_students
     @students.count == 1 ? "Now we have 1 student" : "Now we have #{@students.count} students"
     break if finished_input
   end
-  @students
 end
 
 def finished_input
@@ -64,12 +63,20 @@ def print_footer
   puts "Overall, we have #{@students.count} great students"
 end
 
+def menu_options
+  {
+    1=> "Input the students",
+    2=> "Show the students",
+    3=> "Save the students",
+    4=> "Load existing students",
+    9=> "Exit" 
+  }
+end
+
 def print_menu
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "3. Save the students"
-    puts "4. Load existing students"
-    puts "9. Exit" 
+  menu_options.each { |number, description|
+    puts "#{number}. #{description}"
+  }
 end
 
 def show_students
@@ -111,6 +118,7 @@ def load_students(file_name = "students.csv")
 end
 
 def process(selection)
+  puts "you chose #{print_menu[selection.to_i]}"
   case selection
     when "1"
       input_students   
