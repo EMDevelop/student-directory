@@ -1,5 +1,7 @@
+require 'csv'
 @cohorts = ["january","february" ,"march","april", "may", "june", "july", "august", "september", "october", "november", "december"]
 @students = []
+@file
 
 def input_students
   puts "To finish, just hit return twice at any stage"
@@ -13,7 +15,6 @@ def input_students
     puts "Please enter Birth Country"
     birth_country = STDIN.gets.chomp
     update_student_records(name, cohort.to_sym, hobby, birth_country)
-    @students.count == 1 ? "Now we have 1 student" : "Now we have #{@students.count} students"
     break if finished_input
   end
 end
@@ -37,6 +38,7 @@ end
 
 def update_student_records(name, cohort, hobby, country)
   @students << {name: name, cohort: cohort, hobby: hobby, birth_country: country}
+  @students.count == 1 ? "Now we have 1 student" : "Now we have #{@students.count} students"
 end
 
 def print_header  
@@ -70,15 +72,15 @@ def show_students
   print_footer
 end
 
-def save_students
+def save_students(file_name = "students.csv")
   #Saves to CSV
-  file = File.open("students.csv", "w")
-  @students.each do |student|
-    data = [student[:name],student[:birth_country], student[:hobby],student[:cohort]]
-    line = data.join(",")
-    file.puts line
-  end
-  file.close
+  File.open(file_name, "w") {|file|
+    @students.each do |student|
+      data = [student[:name],student[:birth_country], student[:hobby],student[:cohort]]
+      line = data.join(",")
+      file.puts line
+    end
+  }
 end
 
 
@@ -94,12 +96,17 @@ def check_valid_file
 end
 
 def load_students(file_name = "students.csv")
-  file = File.open(file_name, "r")
-  file.readlines.each { |line|
-    name, birth_country,hobby,cohort = line.chomp.split(',')
-    update_student_records(name, cohort.to_sym, hobby, birth_country)
-    }
-  file.close
+  # File.open(file_name, "r") { |file|
+  # file.readlines.each { |line|
+  #   name, birth_country,hobby,cohort = line.chomp.split(',')
+  #   update_student_records(name, cohort.to_sym, hobby, birth_country)
+  #   }
+  # }
+  # refactor to use CSV class
+  CSV.foreach("./students.csv") do |row|
+    # puts row.length
+    update_student_records(row[0], row[3].to_sym, row[2], row[1])
+  end
 end
 
 
